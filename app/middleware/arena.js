@@ -5,7 +5,7 @@ const pathMatching = require('egg-path-matching');
 
 module.exports = options => {
   const { router, queues } = options;
-  const arena = Arena({ queues }, { basePath: router, disableListen: true });
+  const arena = Arena({ queues }, { basePath: router, disableListen: true, useCdn: false });
 
   return async (ctx, next) => {
     const path = ctx.request.originalUrl || /* istanbul ignore next */ ctx.request.url;
@@ -19,7 +19,7 @@ module.exports = options => {
       }
       ctx.status = 200;
       ctx.respond = false;
-      arena(ctx.req, ctx.res);
+      return arena(ctx.req, ctx.res);
     }
 
     await next();
